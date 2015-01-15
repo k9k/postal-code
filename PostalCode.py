@@ -32,7 +32,8 @@ def get_coordinates(name):
 
 
 def get_code_from_coord(lat, lng):
-    url_loc = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(lat) + "," + str(lng) + "&key=" + api_key
+    url_loc = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(lat) + "," + str(lng) + "&key="\
+        + api_key
     s = requests.get(url_loc)
     postal_codes = []
 
@@ -45,12 +46,34 @@ def get_code_from_coord(lat, lng):
                     postal_codes.append(list(s.json()["results"][i]["address_components"][j].values())[k])
 
     if len(postal_codes) > 1:
-        print("Ta lokalizacja posiada więcej kodów pocztowych, istnieje ryzyko, że kod może być nieprawidłowy.")
+        print(resp["more_codes"])
 
     return postal_codes[0]
 
 
-city_in = input("Wprowadź miasto: ")
+def choose_language():
+    print("Choose language:\n\tEN - English\n\tPL - Polish\n")
+    lng = input()
+    global resp
+    if lng.lower() == "pl":
+        resp = {"put_city": "Wprowadź lokalizację: ",
+                "city_postal": "Kod pocztowy miasta",
+                "not_found": "Nie znaleziono",
+                "iis": "to:",
+                "more_codes": "Ta lokalizacja posiada więcej kodów pocztowych, istnieje ryzyko,\
+                                że kod może być nieprawidłowy."
+                }
+    else:
+        resp = {"put_city": "Type location: ",
+                "city_postal": "Postal code of",
+                "not_found": "Not found",
+                "iis": "is:",
+                "more_codes": "This location has more postal codes, this postal code may be incorrect"
+                }
+
+choose_language()
+
+city_in = input(resp["put_city"])
 city = transform(city_in)
 
 try:
@@ -58,7 +81,7 @@ try:
     if not postal_code:
         lattitude, longtitude = get_coordinates(city)
         postal_code = get_code_from_coord(lattitude, longtitude)
-    print("Kod pocztowy miasta", city_in, "to:", postal_code)
+    print(resp["city_postal"], city_in, resp["iis"], postal_code)
 
 except IndexError:
-    print("Nie znaleziono")
+    print(resp["not_found"])
