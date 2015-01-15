@@ -5,7 +5,9 @@ api_key = "AIzaSyC85uPoeZU0REOq9CzpqfpfdueBw-vJhME"
 
 
 def transform(name):
-    return name.replace(" ", "+")
+    ret = name.replace(" ", "+")
+    ret = ret.replace(",", "+")
+    return ret
 
 
 def get_code(name):
