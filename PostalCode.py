@@ -3,6 +3,7 @@ __author__ = 'kamil'
 import requests
 import configparser
 
+
 def get_key():
     global api_key
     config = configparser.ConfigParser()
