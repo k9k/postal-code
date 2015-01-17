@@ -1,7 +1,13 @@
 __author__ = 'kamil'
 
 import requests
-api_key = "AIzaSyC85uPoeZU0REOq9CzpqfpfdueBw-vJhME"
+import configparser
+
+def get_key():
+    global api_key
+    config = configparser.ConfigParser()
+    config.read("key.ini")
+    api_key = config["KEY"]["api_key"]
 
 
 def transform(name):
@@ -71,6 +77,7 @@ def choose_language():
                 "more_codes": "This location has more postal codes, this postal code may be incorrect"
                 }
 
+get_key()
 choose_language()
 
 city_in = input(resp["put_city"])
