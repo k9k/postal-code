@@ -3,7 +3,6 @@ __author__ = 'kamil'
 import requests
 import configparser
 
-
 def get_key():
     global api_key
     config = configparser.ConfigParser()
@@ -78,18 +77,29 @@ def choose_language():
                 "more_codes": "This location has more postal codes, this postal code may be incorrect"
                 }
 
-get_key()
-choose_language()
+if __name__ == "__main__":
+    get_key()
+    choose_language()
 
-city_in = input(resp["put_city"])
-city = transform(city_in)
+    city_in = input(resp["put_city"])
+    city = transform(city_in)
 
-try:
-    postal_code = get_code(city)
-    if not postal_code:
-        lattitude, longtitude = get_coordinates(city)
-        postal_code = get_code_from_coord(lattitude, longtitude)
-    print(resp["city_postal"], city_in, resp["iis"], postal_code)
+    try:
+        postal_code = get_code(city)
+        if not postal_code:
+            lattitude, longtitude = get_coordinates(city)
+            postal_code = get_code_from_coord(lattitude, longtitude)
+        print(resp["city_postal"], city_in, resp["iis"], postal_code)
 
-except IndexError:
-    print(resp["not_found"])
+    except IndexError:
+        print(resp["not_found"])
+
+else:
+    # deafult vaule of resp for testing
+    resp = {"put_city": "Type location: ",
+                "city_postal": "Postal code of",
+                "not_found": "Not found",
+                "iis": "is:",
+                "more_codes": "This location has more postal codes, this postal code may be incorrect"
+                }
+
